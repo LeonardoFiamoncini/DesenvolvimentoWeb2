@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Desenvolvimento Web II</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<div class="container">
+		<h1>Conversor de Moedas</h1><br>
+		<form action="conversor.php" method="post">
+			<legend for="quantia">Digite a quantia em Reais (BRL) que você deseja converter:</legend><br>
+			<input type="number" id="quantia" name="quantia" step="0.01" required
+				style="width: 100%; padding: 8px; margin-bottom: 16px; border: 2px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+			<br><br><br>
+			<legend>Informe para qual moeda a quantia será convertida:</legend><br>
+			<input type="radio" id="DKK" name="moeda" value="DKK" required>
+			<label for="DKK">Coroa Dinamarquesa (DKK)</label><br><br>
+
+			<input type="radio" id="NOK" name="moeda" value="NOK" required>
+			<label for="NOK">Coroa Norueguesa (NOK)</label><br><br>
+
+			<input type="radio" id="SEK" name="moeda" value="SEK" required>
+			<label for="SEK">Coroa Sueca (SEK)</label><br><br>
+
+			<input type="radio" id="USD" name="moeda" value="USD" required>
+			<label for="USD">Dólar Americano (USD)</label><br><br>
+
+			<input type="radio" id="AUD" name="moeda" value="AUD" required>
+			<label for="AUD">Dólar Australiano (AUD)</label><br><br>
+
+			<input type="radio" id="CAD" name="moeda" value="CAD" required>
+			<label for="CAD">Dólar Canadense (CAD)</label><br><br>
+
+			<input type="radio" id="EUR" name="moeda" value="EUR" required>
+			<label for="EUR">Euro (EUR)</label><br><br>
+
+			<input type="radio" id="CHF" name="moeda" value="CHF" required>
+			<label for="CHF">Franco Suíço (CHF)</label><br><br>
+
+			<input type="radio" id="JPY" name="moeda" value="JPY" required>
+			<label for="JPY">Iene (JPY)</label><br><br>
+
+			<input type="radio" id="GBP" name="moeda" value="GBP" required>
+			<label for="GBP">Libra Esterlina (GBP)</label><br><br>
+
+			<input type="submit" name="submit" value="Converter">
+		</form>
+	</div>
+</body>
+
+</html>
