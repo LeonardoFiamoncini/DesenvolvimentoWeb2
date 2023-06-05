@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/db.js');
+const Usuario = require('./usuario.js');
  
 const Filme = sequelize.define('filme', {
     id: {
@@ -16,6 +17,9 @@ const Filme = sequelize.define('filme', {
         type: Sequelize.DOUBLE
     },
     descricao: Sequelize.STRING
-})
+}, { tableName: 'filme'})
  
+Filme.belongsToMany(Usuario, {through: 'usuario_filme', foreignKey: 'filmeId'})
+Usuario.belongsToMany(Filme, {through: 'usuario_filme', foreignKey: 'usuarioId'})
+
 module.exports = Filme;
