@@ -23,6 +23,10 @@ const Usuario = sequelize.define('usuario', {
         set(senha) {
           this.setDataValue("senha", bcrypt.hashSync(senha, 10));
         }
+    },
+    cargo: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
 }, { tableName: 'usuario'})
 
