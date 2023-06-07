@@ -127,6 +127,7 @@
                     <li class="submenu-item" onclick="filtrarFilmes('Ação')">Ação</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Comédia')">Comédia</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Terror')">Terror</li>
+                    <li class="submenu-item" onclick="filtrarFilmes('Meus Filmes')">Meus Filmes</li>
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
             </div>
@@ -136,48 +137,76 @@
             // Array de filmes
             $filmes = array(
                 array(
-                    'nome' => 'Filme 1',
+                    'nome' => 'John Wick 4: Baba Yaga',
                     'genero' => 'Ação',
-                    'descricao' => 'Este é o filme 1. Descrição do filme 1.',
-                    'imagem' => 'imagem.png'
+                    'duracao' => '2h35m',
+                    'avaliacao' => '4',
+                    'descricao' => 'John Wick 4: Baba Yaga lorem ipsum',
+                    'imagem' => 'https://images.justwatch.com/poster/304815974/s718/john-wick-chapter-4.%7Bformat%7D',
+                    'comprado' => false
                 ),
                 array(
-                    'nome' => 'Filme 2',
+                    'nome' => 'The Hangover',
                     'genero' => 'Comédia',
-                    'descricao' => 'Este é o filme 2. Descrição do filme 2.',
-                    'imagem' => 'imagem.png'
+                    'duracao' => '2h10m',
+                    'avaliacao' => '4.7',
+                    'descricao' => 'The Hangover lorem ipsum',
+                    'imagem' => 'https://macmagazine.com.br/wp-content/uploads/2014/04/17-filme.jpg',
+                    'comprado' => false
                 ),
                 array(
-                    'nome' => 'Filme 3',
+                    'nome' => 'Sexta-Feira 13',
                     'genero' => 'Terror',
-                    'descricao' => 'Este é o filme 3. Descrição do filme 3.',
-                    'imagem' => 'imagem.png'
+                    'duracao' => '1h55m',
+                    'avaliacao' => '4.2',
+                    'descricao' => 'Sexta-Feira 13 lorem ipsum',
+                    'imagem' => 'https://br.web.img3.acsta.net/pictures/15/03/10/20/18/175541.jpg',
+                    'comprado' => false
                 ),
                 array(
-                    'nome' => 'Filme 4',
+                    'nome' => 'John Wick 3: Parabellum',
                     'genero' => 'Ação',
-                    'descricao' => 'Este é o filme 4. Descrição do filme 4.',
-                    'imagem' => 'imagem.png'
+                    'duracao' => '2h05m',
+                    'avaliacao' => '4.5',
+                    'descricao' => 'John Wick 3: Parabellum lorem ipsum',
+                    'imagem' => 'https://br.web.img3.acsta.net/pictures/19/04/03/21/31/0977319.jpg',
+                    'comprado' => true
                 ),
                 array(
-                    'nome' => 'Filme 5',
-                    'genero' => 'Comédia',
-                    'descricao' => 'Este é o filme 5. Descrição do filme 5.',
-                    'imagem' => 'imagem.png'
+                    'nome' => 'Halloween',
+                    'genero' => 'Terror',
+                    'duracao' => '1h40m',
+                    'avaliacao' => '4',
+                    'descricao' => 'Halloween lorem ipsum',
+                    'imagem' => 'https://br.web.img2.acsta.net/pictures/15/03/10/17/12/529336.jpg',
+                    'comprado' => true
                 ),
                 // ...
             );
 
             // Exibindo os filmes
             foreach ($filmes as $filme) {
-                echo '<div class="filme ' . strtolower($filme['genero']) . '">';
+                echo '<form action="moviePage.php" method="POST">';
+                echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme['nome']) . '">';
+                echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme['genero']) . '">';
+                echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme['descricao']) . '">';
+                echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
+            
+                echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
                 echo '<img src="' . $filme['imagem'] . '">';
                 echo '<div class="descricao">';
                 echo '<h2>' . $filme['nome'] . '</h2>';
                 echo '<p>' . $filme['genero'] . '</p>';
+
+                if ($filme['comprado']) echo '<p>Comprado</p>';
+                else echo '<br><br>';
+
                 echo '</div>';
-                echo '</div>';
+                echo '</button>';
+                
+                echo '</form>';
             }
+            
             ?>
         </div>
 
@@ -188,6 +217,7 @@
                 submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
             }
 
+            // Função para filtrar os filmes 
             function filtrarFilmes(genero) {
                 var filmes = document.getElementsByClassName('filme');
                 for (var i = 0; i < filmes.length; i++) {
@@ -209,6 +239,12 @@
             });
         </script>
     </div>
+
+<footer>
+<div class="container">
+    <p class="rodape">Catálogo de Filmes - Todos os direitos reservados &copy; 2023</p>
+</div>
+</footer>
 
 </body>
 
