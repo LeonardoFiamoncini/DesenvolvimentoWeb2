@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Web II Movies</title>
@@ -88,6 +89,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="cabecalho">
@@ -145,4 +147,5 @@
         </div>
     </footer>
 </body>
+
 </html>

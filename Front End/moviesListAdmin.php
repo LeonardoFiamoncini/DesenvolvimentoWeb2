@@ -119,7 +119,7 @@
 <body>
     <div class="container">
         <div class="cabecalho">
-        <div class="titulo" onclick="redirecionarParaIndex()" style="cursor: pointer;">Web II Movies</div>
+            <div class="titulo" onclick="redirecionarParaIndex()" style="cursor: pointer;">Web II Movies</div>
             <div class="submenu" onclick="toggleSubMenu('submenu-genero')">
                 Filtros
                 <ul class="submenu-list" id="submenu-genero">
@@ -127,7 +127,7 @@
                     <li class="submenu-item" onclick="filtrarFilmes('Ação')">Ação</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Comédia')">Comédia</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Terror')">Terror</li>
-                    <li class="submenu-item" onclick="filtrarFilmes('Meus Filmes')">Meus Filmes</li>
+                    <li class="submenu-item" onclick="filtrarFilmes('Comprados')">Comprados</li>
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
             </div>
@@ -164,7 +164,7 @@
                     'avaliacao' => '4.2',
                     'descricao' => 'Sexta-Feira 13 lorem ipsum',
                     'imagem' => 'https://br.web.img3.acsta.net/pictures/15/03/10/20/18/175541.jpg',
-                    'comprado' => false
+                    'comprado' => true
                 ),
                 array(
                     'nome' => 'John Wick 3: Parabellum',
@@ -173,7 +173,7 @@
                     'avaliacao' => '4.5',
                     'descricao' => 'John Wick 3: Parabellum lorem ipsum',
                     'imagem' => 'https://br.web.img3.acsta.net/pictures/19/04/03/21/31/0977319.jpg',
-                    'comprado' => true
+                    'comprado' => false
                 ),
                 array(
                     'nome' => 'Halloween',
@@ -182,12 +182,11 @@
                     'avaliacao' => '4',
                     'descricao' => 'Halloween lorem ipsum',
                     'imagem' => 'https://br.web.img2.acsta.net/pictures/15/03/10/17/12/529336.jpg',
-                    'comprado' => true
+                    'comprado' => false
                 ),
                 // ...
             );
 
-            // Exibindo os filmes
             // Exibindo os filmes
             foreach ($filmes as $filme) {
                 echo '<form action="moviePageAdmin.php" method="POST">';
@@ -197,22 +196,23 @@
                 echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
                 echo '<input type="hidden" name="avaliacao" value="' . htmlspecialchars($filme['avaliacao']) . '" style="display: none;">';
                 echo '<input type="hidden" name="duracao" value="' . htmlspecialchars($filme['duracao']) . '" style="display: none;">';
-                
+
                 echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
                 echo '<img src="' . $filme['imagem'] . '">';
                 echo '<div class="descricao">';
                 echo '<h2>' . $filme['nome'] . '</h2>';
-                echo '<p>' . $filme['genero'] . '</p>';
-            
+
                 if ($filme['comprado']) echo '<p>Comprado</p>';
                 else echo '<br><br>';
-            
+
+                echo '<p>' . $filme['genero'] . '</p>';
+
                 echo '</div>';
                 echo '</button>';
-                
+
                 echo '</form>';
             }
-            
+
             ?>
         </div>
 
@@ -231,7 +231,11 @@
             function filtrarFilmes(genero) {
                 var filmes = document.getElementsByClassName('filme');
                 for (var i = 0; i < filmes.length; i++) {
-                    if (genero === '' || filmes[i].classList.contains(genero.toLowerCase())) {
+                    if (
+                        genero === '' || // Mostrar todos os filmes se o gênero estiver vazio
+                        (genero === 'Comprados' && filmes[i].querySelector('p').textContent === 'Comprado') || // Exibir apenas filmes com 'comprado' => true
+                        filmes[i].classList.contains(genero.toLowerCase()) // Filtrar por gênero
+                    ) {
                         filmes[i].style.display = 'block';
                     } else {
                         filmes[i].style.display = 'none';
@@ -254,11 +258,11 @@
         </script>
     </div>
 
-<footer>
-<div class="container">
-    <p class="rodape">Web II Movies - Todos os direitos reservados &copy; 2023</p>
-</div>
-</footer>
+    <footer>
+        <div class="container">
+            <p class="rodape">Web II Movies - Todos os direitos reservados &copy; 2023</p>
+        </div>
+    </footer>
 
 </body>
 

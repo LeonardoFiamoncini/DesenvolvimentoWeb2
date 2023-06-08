@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <?php 
-        if ($_POST["username"] == "sandyeleonardo" && $_POST["password"] == "web2") {
-            echo "<script>window.location.href = 'moviesListAdmin.php';</script>";
-        } else {
-            echo "<div class='container'>
+    <?php
+    if ($_POST["username"] == "sandyeleonardo" && $_POST["password"] == "web2") {
+        echo "<script>window.location.href = 'moviesListAdmin.php';</script>";
+    } else {
+        echo "<div class='container'>
                     <p>Usuário inválido.</p>  
                     <br>
                     <div>
@@ -22,13 +22,13 @@
                         <a href='index.php'>Voltar para Home</a><br><br><br>
                     </div>
                 </div>";
-        }
+    }
     ?>
-    	<footer>
-		<div class="container">
-			<p class="rodape">Web II Movies - Todos os direitos reservados &copy; 2023</p>
-		</div>
-	</footer>
+    <footer>
+        <div class="container">
+            <p class="rodape">Web II Movies - Todos os direitos reservados &copy; 2023</p>
+        </div>
+    </footer>
 </body>
 
 </html>
