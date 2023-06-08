@@ -92,8 +92,8 @@
     <div class="container">
         <div class="cabecalho">
             <div class="titulo" onclick="redirecionarParaIndex()" style="cursor: pointer;">Web II Movies</div>
-            <div class="submenu" onclick="acessarComoAdmin()">
-                Acessar como Admin
+            <div class="submenu" onclick="acessarComoUser()">
+                Acessar como User
             </div>
         </div>
         <div class="filme-detalhes">
@@ -130,12 +130,12 @@
 
         <script>
             // Funções JavaScript
-            function acessarComoAdmin() {
-                window.location.href = 'adminEntry.html';
+            function acessarComoUser() {
+                window.location.href = 'index.php';
             }
 
             function redirecionarParaIndex() {
-                window.location.href = 'index.php';
+                window.location.href = 'moviesListAdmin.php';
             }
         </script>
     </div>

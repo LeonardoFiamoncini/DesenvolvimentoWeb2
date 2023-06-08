@@ -8,7 +8,8 @@ body {
 	margin: 50px auto;
 	display: flex;
 	flex-direction: column;
-	align-items: center;	padding: 20px;
+	align-items: center;
+	padding: 20px;
 	background-color: #444444;
 	border-radius: 10px;
 	max-width: 600px;
@@ -18,15 +19,18 @@ label {
 	margin-bottom: 10px;
 }
 
-a, input[type="number"] {
+a,
+input[type="number"],
+input[type="submit"] {
 	padding: 10px;
 	border: none;
 	background-color: #ffffff;
 	border-radius: 5px;
 }
 
-a, input[type="submit"] {
-    text-decoration: none;
+a,
+input[type="submit"] {
+	text-decoration: none;
 	margin-top: 20px;
 	padding: 10px;
 	background-color: #0075ff;
@@ -37,11 +41,12 @@ a, input[type="submit"] {
 	transition: background-color 0.3s ease-in-out;
 }
 
-a:hover, input[type="submit"]:hover {
+a:hover,
+input[type="submit"]:hover {
 	background-color: #0059be;
 }
 
-input[type="radio"] {
-	background-color: #0075ff;
-	margin-right: 16px;
+input.centered {
+	margin: 0 auto;
+	display: block;
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Catálogo de Filmes</title>
+    <title>Web II Movies</title>
     <style>
         /* Estilos para o catálogo de filmes */
         body {
@@ -119,9 +119,9 @@
 <body>
     <div class="container">
         <div class="cabecalho">
-            <div class="titulo">Catálogo de Filmes</div>
+            <div class="titulo" onclick="redirecionarParaIndex()" style="cursor: pointer;">Web II Movies</div>
             <div class="submenu" onclick="toggleSubMenu('submenu-genero')">
-                Filtrar por Gênero
+                Filtros
                 <ul class="submenu-list" id="submenu-genero">
                     <li class="submenu-item" onclick="filtrarFilmes('')">Todos</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Ação')">Ação</li>
@@ -130,6 +130,9 @@
                     <li class="submenu-item" onclick="filtrarFilmes('Meus Filmes')">Meus Filmes</li>
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
+            </div>
+            <div class="submenu" onclick="acessarComoAdmin()">
+                Acessar como Admin
             </div>
         </div>
         <div class="catalogo-filmes">
@@ -185,13 +188,16 @@
             );
 
             // Exibindo os filmes
+            // Exibindo os filmes
             foreach ($filmes as $filme) {
                 echo '<form action="moviePage.php" method="POST">';
                 echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme['nome']) . '">';
                 echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme['genero']) . '">';
                 echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme['descricao']) . '">';
                 echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
-            
+                echo '<input type="hidden" name="avaliacao" value="' . htmlspecialchars($filme['avaliacao']) . '" style="display: none;">';
+                echo '<input type="hidden" name="duracao" value="' . htmlspecialchars($filme['duracao']) . '" style="display: none;">';
+
                 echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
                 echo '<img src="' . $filme['imagem'] . '">';
                 echo '<div class="descricao">';
@@ -203,10 +209,10 @@
 
                 echo '</div>';
                 echo '</button>';
-                
+
                 echo '</form>';
             }
-            
+
             ?>
         </div>
 
@@ -215,6 +221,10 @@
             function toggleSubMenu(submenuId) {
                 var submenu = document.getElementById(submenuId);
                 submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+            }
+
+            function redirecionarParaIndex() {
+                window.location.href = 'index.php';
             }
 
             // Função para filtrar os filmes 
@@ -229,6 +239,10 @@
                 }
             }
 
+            function acessarComoAdmin() {
+                window.location.href = 'adminEntry.html';
+            }
+
             // Event listener para fechar os submenus quando clicar fora
             window.addEventListener('click', function(event) {
                 var submenu = document.getElementById('submenu-genero');
@@ -240,11 +254,11 @@
         </script>
     </div>
 
-<footer>
-<div class="container">
-    <p class="rodape">Catálogo de Filmes - Todos os direitos reservados &copy; 2023</p>
-</div>
-</footer>
+    <footer>
+        <div class="container">
+            <p class="rodape">Web II Movies - Todos os direitos reservados &copy; 2023</p>
+        </div>
+    </footer>
 
 </body>
 
