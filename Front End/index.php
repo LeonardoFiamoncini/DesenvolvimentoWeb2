@@ -146,7 +146,8 @@
                     'avaliacao' => '4',
                     'descricao' => 'John Wick 4: Baba Yaga lorem ipsum',
                     'imagem' => 'https://images.justwatch.com/poster/304815974/s718/john-wick-chapter-4.%7Bformat%7D',
-                    'comprado' => false
+                    'comprado' => false,
+                    'valor' => 10.50,
                 ),
                 array(
                     'nome' => 'The Hangover',
@@ -155,7 +156,8 @@
                     'avaliacao' => '4.7',
                     'descricao' => 'The Hangover lorem ipsum',
                     'imagem' => 'https://macmagazine.com.br/wp-content/uploads/2014/04/17-filme.jpg',
-                    'comprado' => false
+                    'comprado' => false,
+                    'valor' => 12.99,
                 ),
                 array(
                     'nome' => 'Sexta-Feira 13',
@@ -164,7 +166,8 @@
                     'avaliacao' => '4.2',
                     'descricao' => 'Sexta-Feira 13 lorem ipsum',
                     'imagem' => 'https://br.web.img3.acsta.net/pictures/15/03/10/20/18/175541.jpg',
-                    'comprado' => true
+                    'comprado' => true,
+                    'valor' => 10.99,
                 ),
                 array(
                     'nome' => 'John Wick 3: Parabellum',
@@ -173,7 +176,8 @@
                     'avaliacao' => '4.5',
                     'descricao' => 'John Wick 3: Parabellum lorem ipsum',
                     'imagem' => 'https://br.web.img3.acsta.net/pictures/19/04/03/21/31/0977319.jpg',
-                    'comprado' => false
+                    'comprado' => false,
+                    'valor' => 5.75,
                 ),
                 array(
                     'nome' => 'Halloween',
@@ -182,7 +186,8 @@
                     'avaliacao' => '4',
                     'descricao' => 'Halloween lorem ipsum',
                     'imagem' => 'https://br.web.img2.acsta.net/pictures/15/03/10/17/12/529336.jpg',
-                    'comprado' => false
+                    'comprado' => false,
+                    'valor' => 11.15,
                 ),
                 // ...
             );
@@ -196,6 +201,7 @@
                 echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
                 echo '<input type="hidden" name="avaliacao" value="' . htmlspecialchars($filme['avaliacao']) . '" style="display: none;">';
                 echo '<input type="hidden" name="duracao" value="' . htmlspecialchars($filme['duracao']) . '" style="display: none;">';
+                echo '<input type="hidden" name="valor" value="' . htmlspecialchars($filme['valor']) . '" style="display: none;">';
 
                 echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
                 echo '<img src="' . $filme['imagem'] . '">';
