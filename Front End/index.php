@@ -17,6 +17,10 @@
             margin: 20px;
         }
 
+        .cartaz {
+            width: 10vw;
+        }
+
         .catalogo-filmes {
             display: flex;
             flex-wrap: wrap;
@@ -139,97 +143,42 @@
             <?php
             // Array de filmes
             $url = "http://localhost:3001/filme/listar";
-            $response = file_get_contents($url);
-            if ($response != null){
-                echo $response;
-            } 
-            
-            $filmes = array(
-                array(
-                    'nome' => 'John Wick 4: Baba Yaga',
-                    'genero' => 'Ação',
-                    'duracao' => '2h35m',
-                    'avaliacao' => '4',
-                    'descricao' => 'John Wick 4: Baba Yaga lorem ipsum',
-                    'imagem' => 'https://images.justwatch.com/poster/304815974/s718/john-wick-chapter-4.%7Bformat%7D',
-                    'comprado' => false,
-                    'valor' => 10.50,
-                ),
-                array(
-                    'nome' => 'The Hangover',
-                    'genero' => 'Comédia',
-                    'duracao' => '2h10m',
-                    'avaliacao' => '4.7',
-                    'descricao' => 'The Hangover lorem ipsum',
-                    'imagem' => 'https://macmagazine.com.br/wp-content/uploads/2014/04/17-filme.jpg',
-                    'comprado' => false,
-                    'valor' => 12.99,
-                ),
-                array(
-                    'nome' => 'Sexta-Feira 13',
-                    'genero' => 'Terror',
-                    'duracao' => '1h55m',
-                    'avaliacao' => '4.2',
-                    'descricao' => 'Sexta-Feira 13 lorem ipsum',
-                    'imagem' => 'https://br.web.img3.acsta.net/pictures/15/03/10/20/18/175541.jpg',
-                    'comprado' => true,
-                    'valor' => 10.99,
-                ),
-                array(
-                    'nome' => 'John Wick 3: Parabellum',
-                    'genero' => 'Ação',
-                    'duracao' => '2h05m',
-                    'avaliacao' => '4.5',
-                    'descricao' => 'John Wick 3: Parabellum lorem ipsum',
-                    'imagem' => 'https://br.web.img3.acsta.net/pictures/19/04/03/21/31/0977319.jpg',
-                    'comprado' => false,
-                    'valor' => 5.75,
-                ),
-                array(
-                    'nome' => 'Halloween',
-                    'genero' => 'Terror',
-                    'duracao' => '1h40m',
-                    'avaliacao' => '4',
-                    'descricao' => 'Halloween lorem ipsum',
-                    'imagem' => 'https://br.web.img2.acsta.net/pictures/15/03/10/17/12/529336.jpg',
-                    'comprado' => false,
-                    'valor' => 11.15,
-                ),
-                // ...
-            );
+            $response = json_decode(file_get_contents($url));
 
-            // Exibindo os filmes
-            foreach ($filmes as $filme) {
-                echo '<form action="moviePage.php" method="POST">';
-                echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme['nome']) . '">';
-                echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme['genero']) . '">';
-                echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme['descricao']) . '">';
-                echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
-                echo '<input type="hidden" name="avaliacao" value="' . htmlspecialchars($filme['avaliacao']) . '" style="display: none;">';
-                echo '<input type="hidden" name="duracao" value="' . htmlspecialchars($filme['duracao']) . '" style="display: none;">';
-                echo '<input type="hidden" name="valor" value="' . htmlspecialchars($filme['valor']) . '" style="display: none;">';
+            if ($response != null) {
+                // Exibindo os filmes
+                foreach ($response as $filme) {
 
-                echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
-                echo '<img src="' . $filme['imagem'] . '">';
-                echo '<div class="descricao">';
-                echo '<h2>' . $filme['nome'] . '</h2>';
+                    $urlFormatada = 'https://image.tmdb.org/t/p/original' . $filme->imagem;
 
-                if ($filme['comprado']) echo '<p>Comprado</p>';
-                else echo '<br><br>';
+                    echo '<form action="moviePage.php" method="POST">';
+                    echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme->nome) . '">';
+                    // echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme->genero) . '">';
+                    echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme->descricao) . '">';
+                    echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($urlFormatada) . '">';
+                    echo '<input type="hidden" name="nota" value="' . htmlspecialchars($filme->nota) . '" style="display: none;">';
+                    echo '<input type="hidden" name="preco" value="' . htmlspecialchars($filme->preco) . '" style="display: none;">';
 
-                echo '<p>' . $filme['genero'] . '</p>';
+                    echo '<button type="submit" class="filme">';
+                    echo '<img class=\'cartaz\' src="' . $urlFormatada . '">';
+                    echo '<div class="descricao">';
+                    echo '<h2>' . $filme->nome . '</h2>';
 
-                echo '</div>';
-                echo '</button>';
+                    // if ($filme['comprado']) echo '<p>Comprado</p>';
+                    // else echo '<br><br>';
 
-                echo '</form>';
+                    // echo '<p>' . $filme->genero . '</p>';
+
+                    echo '</div>';
+                    echo '</button>';
+
+                    echo '</form>';
+                }
             }
-
             ?>
         </div>
 
         <script>
-
             // Funções JavaScript
             function toggleSubMenu(submenuId) {
                 var submenu = document.getElementById(submenuId);

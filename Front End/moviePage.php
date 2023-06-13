@@ -117,7 +117,6 @@
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
                     $genero = isset($_POST['genero']) ? $_POST['genero'] : '';
-                    $duracao = isset($_POST['duracao']) ? $_POST['duracao'] : '';
                     $avaliacao = isset($_POST['avaliacao']) ? $_POST['avaliacao'] : '';
                     $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
                     $imagem = isset($_POST['imagem']) ? $_POST['imagem'] : '';
@@ -131,7 +130,6 @@
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     echo '<h2>' . htmlspecialchars($nome) . '</h2>';
                     echo '<p>Gênero: ' . htmlspecialchars($genero) . '</p>';
-                    echo '<p>Duração: ' . htmlspecialchars($duracao) . '</p>';
                     echo '<p>Avaliação: ' . htmlspecialchars($avaliacao) . '</p>';
                     echo '<p>Descrição: ' . htmlspecialchars($descricao) . '</p><br><br>';
 
