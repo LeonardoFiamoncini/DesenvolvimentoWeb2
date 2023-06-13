@@ -71,6 +71,15 @@
             cursor: pointer;
         }
 
+        .moeda-wrapper {
+            margin-top: 20px;
+        }
+
+        .moeda-wrapper label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
         /* Estilos para o botão "Comprar" */
         .botao-comprar {
             padding: 10px 20px;
@@ -86,6 +95,12 @@
 
         .botao-comprar:hover {
             background-color: #005ec1;
+        }
+
+        .valor-dinamico {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #ddd;
         }
     </style>
 </head>
@@ -108,7 +123,7 @@
                     $avaliacao = isset($_POST['avaliacao']) ? $_POST['avaliacao'] : '';
                     $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
                     $imagem = isset($_POST['imagem']) ? $_POST['imagem'] : '';
-
+                    $valor = isset($_POST['valor']) ? $_POST['valor'] : '';
                     echo '<img src="' . htmlspecialchars($imagem) . '" alt="' . htmlspecialchars($nome) . '">';
                 }
                 ?>
@@ -120,13 +135,23 @@
                     echo '<p>Gênero: ' . htmlspecialchars($genero) . '</p>';
                     echo '<p>Duração: ' . htmlspecialchars($duracao) . '</p>';
                     echo '<p>Avaliação: ' . htmlspecialchars($avaliacao) . '</p>';
-                    echo '<p>Descrição: ' . htmlspecialchars($descricao) . '</p>';
-                    // Adicione aqui o código para exibir as outras informações do filme
+                    echo '<p>Descrição: ' . htmlspecialchars($descricao) . '</p><br><br>';
+
+                    echo '<div class="moeda-wrapper">';
+                    echo '<label>Escolha a moeda desejada para realizar a compra:</label>';
+                    echo '<label><input type="radio" name="moeda" value="BRL" onchange="atualizarValorDinamico(this)"> Real Brasileiro (BRL)</label>';
+                    echo '<label><input type="radio" name="moeda" value="USD" onchange="atualizarValorDinamico(this)"> Dólar Americano (USD)</label>';
+                    echo '<label><input type="radio" name="moeda" value="EUR" onchange="atualizarValorDinamico(this)"> Euro (EUR)</label>';
+                    echo '<label><input type="radio" name="moeda" value="CHF" onchange="atualizarValorDinamico(this)"> Franco Suíço (CHF)</label>';
+                    echo '<label><input type="radio" name="moeda" value="JPY" onchange="atualizarValorDinamico(this)"> Iene (JPY)</label>';
+                    echo '<label><input type="radio" name="moeda" value="GBP" onchange="atualizarValorDinamico(this)"> Libra Esterlina (GBP)</label>';
+                    echo '</div>';
+
+                    echo '<br><br><button class="botao-comprar" type="button">Comprar - <strong><span id="valor-dinamico"></span></strong></button>';
                 } else {
                     echo '<p>Nenhum detalhe do filme recebido.</p>';
                 }
                 ?>
-                <br><br><button class="botao-comprar" type="button">Comprar</button>
             </div>
         </div>
 
@@ -138,6 +163,39 @@
 
             function redirecionarParaIndex() {
                 window.location.href = 'moviesListAdmin.php';
+            }
+
+            function atualizarValorDinamico(radio) {
+                const moedaSelecionada = radio.value;
+                const valor = <?php echo json_encode($valor); ?>;
+                let novoValor = '';
+
+                if (moedaSelecionada === 'BRL') {
+                    novoValor = Number(valor).toFixed(2);
+                    novoValor = moedaSelecionada + ' ' + novoValor;
+                    document.getElementById('valor-dinamico').textContent = novoValor;
+                    return;
+                }
+
+                const data_inicial = '<?php echo date('m-d-Y', strtotime('-7 days')); ?>';
+                const data_final = '<?php echo date('m-d-Y'); ?>';
+
+                const url = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda=\'' + encodeURIComponent(moedaSelecionada) + '\'&@dataInicial=\'' + encodeURIComponent(data_inicial) + '\'&@dataFinalCotacao=\'' + encodeURIComponent(data_final) + '\'&$top=1&$orderby=dataHoraCotacao%20desc&$format=json&$select=cotacaoCompra';
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const cotacao = data.value[0].cotacaoCompra;
+
+                        if (cotacao) {
+                            novoValor = moedaSelecionada + ' ' + (valor / cotacao).toFixed(2);
+                        }
+
+                        document.getElementById('valor-dinamico').textContent = novoValor;
+                    })
+                    .catch(error => {
+                        console.error('Erro ao obter a cotação da moeda:', error);
+                    });
             }
         </script>
     </div>
