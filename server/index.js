@@ -17,7 +17,7 @@
     app.use(express.json());
     
     try {
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ force: false });
     } catch (error) {
         console.log(error);
     }

@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 const Filme = require("../bd/models/filme");
-
+require("dotenv").config();
 async function listar(req, res) {
     const filmes = await Filme.findAll();
         
@@ -9,7 +9,6 @@ async function listar(req, res) {
     // method: 'GET',
     // headers: {
     //     accept: 'application/json',
-    //     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhODExNTM2MDYyOWZhNjE0YjZiNDlhMzE5ZDk1MTQ3MyIsInN1YiI6IjY0N2NmMjc4MjYzNDYyMDEzMzcxMjFiMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._wgw0d4IZA2zrEUj-3JVaDJaUg5CYNAI9zjPL9gBlV8'
     // }
     // };
 
@@ -26,7 +25,41 @@ async function cadastrar(req, res) {
     res.json(filmeCadastrado);
 }
 
+async function preencher_filmes(req, res) {
+    let totalPaginas = 50;
+    for (let i = 1; i <= totalPaginas; i++) {
+        const url = `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY_MOVIE}&language=pt-BR&page=${i}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: process.env.ACESS_TOKEN_MOVIE
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => {
+                console.log(json.results)
+                json.results.forEach(async (filme) => {
+                    const filmeCadastrado = await Filme.create({
+                        nome: filme.title,
+                        descricao: filme.overview,
+                        nota: filme.vote_average,
+                        data_lancamento: filme.release_date,
+                        imagem: filme.poster_path
+                    });
+                });
+            })
+            .catch(err => console.error('error:' + err));
+    }
+    res.json({ message: "Filmes cadastrados com sucesso!" });
+
+}
+
+
 module.exports = {
     listar,
-    cadastrar
+    cadastrar,
+    preencher_filmes
 }

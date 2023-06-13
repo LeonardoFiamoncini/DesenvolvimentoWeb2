@@ -1,0 +1,18 @@
+config:
+  target: "http://localhost:3001" # host target
+  phases:
+    - duration: 60 # duração em que novos usuários virtuais são adicionados
+      arrivalRate: 5 # taxa de chegada de novos usuários virtuais
+      maxVusers: 10 # número máximo de usuários virtuais
+      name: Fase teste # nome da fase
+
+
+scenarios:
+  - name: "Get Filmes" # nome do cenário
+    flow: # fluxo de execução do cenário
+      - get: 
+          url: "/filme/listar" # endpoint
+          headers: # cabeçalho da requisição
+            Content-Type: "application/json" # tipo de conteúdo
+            Accept: "application/json" # tipo de conteúdo
+

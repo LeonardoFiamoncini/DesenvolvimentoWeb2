@@ -138,6 +138,12 @@
         <div class="catalogo-filmes">
             <?php
             // Array de filmes
+            $url = "http://localhost:3001/filme/listar";
+            $response = file_get_contents($url);
+            if ($response != null){
+                echo $response;
+            } 
+            
             $filmes = array(
                 array(
                     'nome' => 'John Wick 4: Baba Yaga',
@@ -217,6 +223,7 @@
         </div>
 
         <script>
+
             // Funções JavaScript
             function toggleSubMenu(submenuId) {
                 var submenu = document.getElementById(submenuId);
@@ -256,6 +263,11 @@
                     submenu.style.display = 'none';
                 }
             });
+
+            // Quando carregar a página carregar os filmes
+            window.onload = function() {
+                alert("bem vindo ao web2movies")
+            }
         </script>
     </div>
 

@@ -17,10 +17,10 @@ const Avaliacao = sequelize.define('avaliacao', {
     comentario: Sequelize.STRING
 }, { tableName: 'avaliacao'})
  
-Avaliacao.hasOne(Usuario, {foreignKey: 'usuarioId'})
 Usuario.hasMany(Avaliacao, {foreignKey: 'usuarioId'})
+Avaliacao.belongsTo(Usuario)
 
-Avaliacao.hasOne(Filme, {foreignKey: 'filmeId'})
 Filme.hasMany(Avaliacao, {foreignKey: 'filmeId'})
+Avaliacao.belongsTo(Filme)
 
 module.exports = Avaliacao;

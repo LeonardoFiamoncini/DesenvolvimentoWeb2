@@ -16,7 +16,10 @@ const Filme = sequelize.define('filme', {
     preco: {
         type: Sequelize.DOUBLE
     },
-    descricao: Sequelize.STRING
+    descricao: Sequelize.STRING,
+    imagem: Sequelize.STRING,
+    data_lancamento: Sequelize.DATE,
+    nota: Sequelize.DOUBLE,
 }, { tableName: 'filme'})
  
 Filme.belongsToMany(Usuario, {through: 'usuario_filme', foreignKey: 'filmeId'})
