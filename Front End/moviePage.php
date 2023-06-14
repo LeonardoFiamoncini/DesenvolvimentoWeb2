@@ -116,11 +116,11 @@
                 <?php
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
-                    $genero = isset($_POST['genero']) ? $_POST['genero'] : '';
-                    $avaliacao = isset($_POST['avaliacao']) ? $_POST['avaliacao'] : '';
+                    // $genero = isset($_POST['genero']) ? $_POST['genero'] : '';
+                    $nota = isset($_POST['nota']) ? $_POST['nota'] : '';
                     $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
                     $imagem = isset($_POST['imagem']) ? $_POST['imagem'] : '';
-                    $valor = isset($_POST['valor']) ? $_POST['valor'] : '';
+                    $preco = isset($_POST['preco']) ? $_POST['preco'] : '';
                     echo '<img src="' . htmlspecialchars($imagem) . '" alt="' . htmlspecialchars($nome) . '">';
                 }
                 ?>
@@ -129,8 +129,8 @@
                 <?php
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     echo '<h2>' . htmlspecialchars($nome) . '</h2>';
-                    echo '<p>Gênero: ' . htmlspecialchars($genero) . '</p>';
-                    echo '<p>Avaliação: ' . htmlspecialchars($avaliacao) . '</p>';
+                    // echo '<p>Gênero: ' . htmlspecialchars($genero) . '</p>';
+                    echo '<p>Nota: ' . htmlspecialchars($nota) . '</p>';
                     echo '<p>Descrição: ' . htmlspecialchars($descricao) . '</p><br><br>';
 
                     echo '<div class="moeda-wrapper">';
@@ -163,11 +163,11 @@
 
             function atualizarValorDinamico(radio) {
                 const moedaSelecionada = radio.value;
-                const valor = <?php echo json_encode($valor); ?>;
+                const preco = <?php echo json_encode($preco); ?>;
                 let novoValor = '';
 
                 if (moedaSelecionada === 'BRL') {
-                    novoValor = Number(valor).toFixed(2);
+                    novoValor = Number(preco).toFixed(2);
                     novoValor = moedaSelecionada + ' ' + novoValor;
                     document.getElementById('valor-dinamico').textContent = novoValor;
                     return;
@@ -184,7 +184,7 @@
                         const cotacao = data.value[0].cotacaoCompra;
 
                         if (cotacao) {
-                            novoValor = moedaSelecionada + ' ' + (valor / cotacao).toFixed(2);
+                            novoValor = moedaSelecionada + ' ' + (preco / cotacao).toFixed(2);
                         }
 
                         document.getElementById('valor-dinamico').textContent = novoValor;

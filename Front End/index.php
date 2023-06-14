@@ -19,11 +19,13 @@
 
         .cartaz {
             width: 10vw;
+
         }
 
         .catalogo-filmes {
             display: flex;
             flex-wrap: wrap;
+            flex-grow: 2;
             justify-content: center;
             margin-top: 80px;
             /* Espaço para evitar que os filmes fiquem escondidos atrás do cabeçalho */
@@ -31,12 +33,15 @@
 
         .filme {
             flex: 0 0 300px;
+            flex-grow: 1;
             margin: 10px;
             background-color: #444;
             border-radius: 5px;
             overflow: hidden;
             transition: transform 0.3s;
             z-index: 1;
+            width: 25vw;
+            height: 90vh;
         }
 
         .filme:hover {
@@ -57,6 +62,8 @@
             margin: 0;
             font-size: 20px;
             color: #fff;
+            line-break: auto;
+            max-width: fit-content;
         }
 
         .filme p {
@@ -157,12 +164,12 @@
                     echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme->descricao) . '">';
                     echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($urlFormatada) . '">';
                     echo '<input type="hidden" name="nota" value="' . htmlspecialchars($filme->nota) . '" style="display: none;">';
-                    echo '<input type="hidden" name="preco" value="' . htmlspecialchars($filme->preco) . '" style="display: none;">';
+                    echo '<input type="hidden" name="preco" value="' . htmlspecialchars($filme->preco) . '">';
 
                     echo '<button type="submit" class="filme">';
                     echo '<img class=\'cartaz\' src="' . $urlFormatada . '">';
-                    echo '<div class="descricao">';
-                    echo '<h2>' . $filme->nome . '</h2>';
+                    echo '<div class=\'descricao\'>';
+                    echo '<h2 class=\'tituloCartaz\'>' . $filme->nome . '</h2>';
 
                     // if ($filme['comprado']) echo '<p>Comprado</p>';
                     // else echo '<br><br>';
