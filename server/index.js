@@ -5,7 +5,7 @@
     const Genero = require("./bd/models/genero.js");
     const Usuario = require("./bd/models/usuario.js");
     const Avaliacao = require("./bd/models/avaliacao.js");
-
+    const RefreshToken = require("./bd/models/refreshToken.js");
     
     const sequelize = require('./bd/config/db.js');
     const express = require("express");
@@ -23,6 +23,8 @@
     }
 
     app.use("/filme", require("./routes/filme"));
+    app.use("/usuario", require("./routes/usuario"));
+    app.use("/auth", require("./routes/auth"));
     app.listen(PORT, () => { console.log(`Servidor rodando na porta ${PORT}`) });
 
 })();

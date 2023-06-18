@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Filme = require("../bd/models/filme");
 require("dotenv").config();
 async function listar(req, res) {
-    const filmes = await Filme.findAll();
+    const filmes = await Filme.findAll({limit: req.params.limit, offset: req.params.offset});
         
     // const url = 'https://api.themoviedb.org/3/authentication';
     // const options = {

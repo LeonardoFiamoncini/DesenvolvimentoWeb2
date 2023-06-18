@@ -142,15 +142,52 @@
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
             </div>
-            <div class="submenu" onclick="acessarComoAdmin()">
-                Acessar como Admin
-            </div>
+            <?php
+                $url = "http://localhost:3001/usuario/nome";
+                $token = $_GET['token'];
+
+                // Cabeçalho da requisição
+                $options = [
+                    'http' => [
+                        'header' => "Authorization: Bearer $token"
+                    ]
+                ];
+                $context = stream_context_create($options);
+
+                $response = json_decode(file_get_contents($url,false, $context));
+                $nome = $response->nome;
+
+                if ($response != null) {
+                    echo '<div class="submenu">';
+                    echo $nome;
+                    echo '</div>';
+                } else {
+                    echo '<div class="submenu" onclick="acessarComoAdmin()">
+                    Acessar como Admin
+                    </div>';
+                }
+            ?>
+           
         </div>
         <div class="catalogo-filmes">
             <?php
+
             // Array de filmes
-            $url = "http://localhost:3001/filme/listar";
-            $response = json_decode(file_get_contents($url));
+            $token = $_GET['token'];
+            $limit = $_GET['limit'];
+            $offset = $_GET['offset'];
+
+            $url = "http://localhost:3001/filme/listar/$limit/$offset";
+
+            // Cabeçalho da requisição
+            $options = [
+                'http' => [
+                    'header' => "Authorization: Bearer $token"
+                ]
+            ];
+            $context = stream_context_create($options);
+
+            $response = json_decode(file_get_contents($url,false, $context));
 
             if ($response != null) {
                 // Exibindo os filmes
@@ -184,9 +221,15 @@
             }
             ?>
         </div>
-
+        <div>
+            <div>
+                <button onclick="carregar_mais('voltar')">Voltar</button>
+                <button onclick="carregar_mais('avancar')">Avançar</button>
+            </div>
+        </div>
         <script>
             // Funções JavaScript
+
             function toggleSubMenu(submenuId) {
                 var submenu = document.getElementById(submenuId);
                 submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
@@ -217,6 +260,22 @@
                 window.location.href = 'adminEntry.html';
             }
 
+            function carregar_mais(direcao){
+                // JavaScript para enviar o token para o servidor PHP
+                var token = localStorage.getItem('refreshToken');
+
+                // Envia o token para o servidor PHP usando uma requisição GET
+                var offset = window.location.href.split('offset=')[1].split('&')[0];
+                var limit = window.location.href.split('limit=')[1].split('&')[0];
+                if (direcao == 'voltar'){
+                    offset = parseInt(offset) - parseInt(limit);
+                } else {
+                    offset = parseInt(offset) + parseInt(limit);
+                }
+                var url = window.location.href.split('?')[0]+'?token='+encodeURIComponent(token)+'&limit='+limit+'&offset='+offset;
+                window.location.href = url;
+            }
+
             // Event listener para fechar os submenus quando clicar fora
             window.addEventListener('click', function(event) {
                 var submenu = document.getElementById('submenu-genero');
@@ -228,7 +287,15 @@
 
             // Quando carregar a página carregar os filmes
             window.onload = function() {
-                alert("bem vindo ao web2movies")
+                // * Se url não tiver o parametro ?token= então redirecionar para o login
+                if (!window.location.href.includes('?token=')) {
+                    // JavaScript para enviar o token para o servidor PHP
+                    var token = localStorage.getItem('refreshToken');
+
+                    // Envia o token para o servidor PHP usando uma requisição GET
+                    var url = window.location.href+'?token='+encodeURIComponent(token)+'&limit=12&offset=0';
+                    window.location.href = url;
+                }
             }
         </script>
     </div>
