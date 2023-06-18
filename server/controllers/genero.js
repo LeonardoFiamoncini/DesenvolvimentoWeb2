@@ -37,7 +37,38 @@ async function addGeneroFilme(req, res){
 
 }
 
+// * preencher generos com a api
+async function preencher_generos(req, res) {
+    try {
+        const url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${process.env.API_KEY_MOVIE}&language=pt-BR&page=${1}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: process.env.ACESS_TOKEN_MOVIE
+            }
+        };
+
+        fetch(url, options)
+            .then(res => res.json())
+            .then(json => {
+                json.genres.forEach(async (genero) => {
+                    console.log(genero)
+                    const generoCadastrado = await Genero.create({
+                        nome: genero.name,
+                        id: genero.id
+                    });
+                });
+            })
+            .catch(err => console.error('error:' + err));
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     cadastrar,
-    addGeneroFilme
+    addGeneroFilme,
+    preencher_generos
 }

@@ -17,9 +17,15 @@
             margin: 20px;
         }
 
+        .cartaz {
+            width: 10vw;
+
+        }
+
         .catalogo-filmes {
             display: flex;
             flex-wrap: wrap;
+            flex-grow: 2;
             justify-content: center;
             margin-top: 80px;
             /* Espaço para evitar que os filmes fiquem escondidos atrás do cabeçalho */
@@ -27,12 +33,15 @@
 
         .filme {
             flex: 0 0 300px;
+            flex-grow: 1;
             margin: 10px;
             background-color: #444;
             border-radius: 5px;
             overflow: hidden;
             transition: transform 0.3s;
             z-index: 1;
+            width: 25vw;
+            height: 90vh;
         }
 
         .filme:hover {
@@ -53,6 +62,8 @@
             margin: 0;
             font-size: 20px;
             color: #fff;
+            line-break: auto;
+            max-width: fit-content;
         }
 
         .filme p {
@@ -130,92 +141,92 @@
                     <li class="submenu-item" onclick="filtrarFilmes('Comprados')">Comprados</li>
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
-            </div>
-            <div class="submenu" onclick="acessarComoUser()">
-                Acessar como User
-            </div>
+        </div>
+        <?php
+                $url = "http://localhost:3001/usuario/nome";
+                $token = $_GET['token'];
+
+                // Cabeçalho da requisição
+                $options = [
+                    'http' => [
+                        'header' => "Authorization: Bearer $token"
+                    ]
+                ];
+                $context = stream_context_create($options);
+
+                $response = json_decode(file_get_contents($url,false, $context));
+                $nome = $response->nome;
+
+                if ($response != null) {
+                    echo '<div class="submenu">';
+                    echo $nome;
+                    echo '</div>';
+                } else {
+                    echo '<div class="submenu" onclick="acessarComoUser()">
+                    Acessar como User
+                    </div>';
+                }
+            ?>
+           
         </div>
         <div class="catalogo-filmes">
             <?php
+
             // Array de filmes
-            $filmes = array(
-                array(
-                    'nome' => 'John Wick 4: Baba Yaga',
-                    'genero' => 'Ação',
-                    'avaliacao' => '4',
-                    'descricao' => 'John Wick 4: Baba Yaga lorem ipsum',
-                    'imagem' => 'https://images.justwatch.com/poster/304815974/s718/john-wick-chapter-4.%7Bformat%7D',
-                    'comprado' => false,
-                    'valor' => 10.50,
-                ),
-                array(
-                    'nome' => 'The Hangover',
-                    'genero' => 'Comédia',
-                    'avaliacao' => '4.7',
-                    'descricao' => 'The Hangover lorem ipsum',
-                    'imagem' => 'https://macmagazine.com.br/wp-content/uploads/2014/04/17-filme.jpg',
-                    'comprado' => false,
-                    'valor' => 12.99,
-                ),
-                array(
-                    'nome' => 'Sexta-Feira 13',
-                    'genero' => 'Terror',
-                    'avaliacao' => '4.2',
-                    'descricao' => 'Sexta-Feira 13 lorem ipsum',
-                    'imagem' => 'https://br.web.img3.acsta.net/pictures/15/03/10/20/18/175541.jpg',
-                    'comprado' => true,
-                    'valor' => 10.99,
-                ),
-                array(
-                    'nome' => 'John Wick 3: Parabellum',
-                    'genero' => 'Ação',
-                    'avaliacao' => '4.5',
-                    'descricao' => 'John Wick 3: Parabellum lorem ipsum',
-                    'imagem' => 'https://br.web.img3.acsta.net/pictures/19/04/03/21/31/0977319.jpg',
-                    'comprado' => false,
-                    'valor' => 5.75,
-                ),
-                array(
-                    'nome' => 'Halloween',
-                    'genero' => 'Terror',
-                    'avaliacao' => '4',
-                    'descricao' => 'Halloween lorem ipsum',
-                    'imagem' => 'https://br.web.img2.acsta.net/pictures/15/03/10/17/12/529336.jpg',
-                    'comprado' => false,
-                    'valor' => 11.15,
-                ),
-                // ...
-            );
+            $token = $_GET['token'];
+            $limit = $_GET['limit'];
+            $offset = $_GET['offset'];
 
-            // Exibindo os filmes
-            foreach ($filmes as $filme) {
-                echo '<form action="moviePageAdmin.php" method="POST">';
-                echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme['nome']) . '">';
-                echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme['genero']) . '">';
-                echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme['descricao']) . '">';
-                echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($filme['imagem']) . '">';
-                echo '<input type="hidden" name="avaliacao" value="' . htmlspecialchars($filme['avaliacao']) . '" style="display: none;">';
-                echo '<input type="hidden" name="valor" value="' . htmlspecialchars($filme['valor']) . '" style="display: none;">';
+            $url = "http://localhost:3001/filme/listar/$limit/$offset";
 
-                echo '<button type="submit" class="filme ' . strtolower($filme['genero']) . '">';
-                echo '<img src="' . $filme['imagem'] . '">';
-                echo '<div class="descricao">';
-                echo '<h2>' . $filme['nome'] . '</h2>';
+            // Cabeçalho da requisição
+            $options = [
+                'http' => [
+                    'header' => "Authorization: Bearer $token"
+                ]
+            ];
+            $context = stream_context_create($options);
 
-                if ($filme['comprado']) echo '<p>Comprado</p>';
-                else echo '<br><br>';
+            $response = json_decode(file_get_contents($url,false, $context));
 
-                echo '<p>' . $filme['genero'] . '</p>';
+            if ($response != null) {
+                // Exibindo os filmes
+                foreach ($response as $filme) {
 
-                echo '</div>';
-                echo '</button>';
+                    $urlFormatada = 'https://image.tmdb.org/t/p/original' . $filme->imagem;
 
-                echo '</form>';
+                    echo '<form action="moviePage.php" method="POST">';
+                    echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme->nome) . '">';
+                    // echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme->genero) . '">';
+                    echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme->descricao) . '">';
+                    echo '<input type="hidden" name="imagem" value="' . htmlspecialchars($urlFormatada) . '">';
+                    echo '<input type="hidden" name="nota" value="' . htmlspecialchars($filme->nota) . '" style="display: none;">';
+                    echo '<input type="hidden" name="preco" value="' . htmlspecialchars($filme->preco) . '">';
+
+                    echo '<button type="submit" class="filme">';
+                    echo '<img class=\'cartaz\' src="' . $urlFormatada . '">';
+                    echo '<div class=\'descricao\'>';
+                    echo '<h2 class=\'tituloCartaz\'>' . $filme->nome . '</h2>';
+
+                    // if ($filme['comprado']) echo '<p>Comprado</p>';
+                    // else echo '<br><br>';
+
+                    // echo '<p>' . $filme->genero . '</p>';
+
+                    echo '</div>';
+                    echo '</button>';
+
+                    echo '</form>';
+                }
             }
-
             ?>
         </div>
-
+        <div>
+            <div>
+                <button onclick="carregar_mais('voltar')">Voltar</button>
+                <button onclick="carregar_mais('avancar')">Avançar</button>
+            </div>
+        </div>
         <script>
             // Funções JavaScript
             function toggleSubMenu(submenuId) {
@@ -247,6 +258,22 @@
                 window.location.href = 'index.php';
             }
 
+            function carregar_mais(direcao){
+                // JavaScript para enviar o token para o servidor PHP
+                var token = localStorage.getItem('refreshToken');
+
+                // Envia o token para o servidor PHP usando uma requisição GET
+                var offset = window.location.href.split('offset=')[1].split('&')[0];
+                var limit = window.location.href.split('limit=')[1].split('&')[0];
+                if (direcao == 'voltar'){
+                    offset = parseInt(offset) - parseInt(limit);
+                } else {
+                    offset = parseInt(offset) + parseInt(limit);
+                }
+                var url = window.location.href.split('?')[0]+'?token='+encodeURIComponent(token)+'&limit='+limit+'&offset='+offset;
+                window.location.href = url;
+            }
+
             // Event listener para fechar os submenus quando clicar fora
             window.addEventListener('click', function(event) {
                 var submenu = document.getElementById('submenu-genero');
@@ -255,6 +282,19 @@
                     submenu.style.display = 'none';
                 }
             });
+
+            // Quando carregar a página carregar os filmes
+            window.onload = function() {
+                // * Se url não tiver o parametro ?token= então redirecionar para o login
+                if (!window.location.href.includes('?token=')) {
+                    // JavaScript para enviar o token para o servidor PHP
+                    var token = localStorage.getItem('refreshToken');
+
+                    // Envia o token para o servidor PHP usando uma requisição GET
+                    var url = window.location.href+'?token='+encodeURIComponent(token)+'&limit=12&offset=0';
+                    window.location.href = url;
+                }
+            }
         </script>
     </div>
 

@@ -49,6 +49,9 @@ async function preencher_filmes(req, res) {
                         data_lancamento: filme.release_date,
                         imagem: filme.poster_path
                     });
+                    for (let genero of filme.genre_ids) {
+                        await filmeCadastrado.addGenero(genero);
+                    }
                 });
             })
             .catch(err => console.error('error:' + err));

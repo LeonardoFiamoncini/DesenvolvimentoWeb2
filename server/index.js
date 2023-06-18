@@ -25,6 +25,7 @@
     app.use("/filme", require("./routes/filme"));
     app.use("/usuario", require("./routes/usuario"));
     app.use("/auth", require("./routes/auth"));
+    app.use("/genero", require("./routes/genero"));
     app.listen(PORT, () => { console.log(`Servidor rodando na porta ${PORT}`) });
 
 })();

@@ -27,6 +27,10 @@ const Usuario = sequelize.define('usuario', {
     cargo: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    saldo: {
+        type: Sequelize.FLOAT,
+        allowNull: false
     }
 }, { tableName: 'usuario'})
 
