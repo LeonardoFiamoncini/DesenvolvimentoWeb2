@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Filme = require("../bd/models/filme");
 require("dotenv").config();
 async function listar(req, res) {
-    const filmes = await Filme.findAll({limit: req.params.limit, offset: req.params.offset});
+    const filmes = await Filme.findAll();
         
     // const url = 'https://api.themoviedb.org/3/authentication';
     // const options = {
@@ -57,8 +57,26 @@ async function preencher_filmes(req, res) {
 
 }
 
+async function distribui_precos(req, res){
+    try {
+        let filmes = await Filme.findAll()
+        let listaPrecos = [10.50,10.99,25.00,50.00,12.60, 18.90, 20.00, 19.99, 28.98, 100];
+        for (let filme of filmes){
+            let preco = listaPrecos[Math.floor(Math.random() * 10)]
+            await filme.update({
+                preco
+            })
+        }
+        res.status(200)
+    } catch (error) {
+        console.log(error)
+        res.status(500)
+    }
+}
+
 
 module.exports = {
+    distribui_precos,
     listar,
     cadastrar,
     preencher_filmes
