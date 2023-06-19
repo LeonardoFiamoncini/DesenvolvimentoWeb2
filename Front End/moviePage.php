@@ -108,13 +108,38 @@
 <body>
     <div class="container">
         <div class="cabecalho">
-            <div class="titulo" onclick="redirecionarParaIndex()" style="cursor: pointer;">Web II Movies</div>
-            <div class="submenu" onclick="acessarComoAdmin()">Acessar como Admin</div>
+            <div class="titulo" onclick="redirecionarParaMenu()" style="cursor: pointer;">Web II Movies</div>
+            <?php
+                $url = "http://localhost:3001/usuario/nome";
+                $token = $_GET['token'];
+
+                // Cabeçalho da requisição
+                $options = [
+                    'http' => [
+                        'header' => "Authorization: Bearer $token"
+                    ]
+                ];
+                $context = stream_context_create($options);
+
+                $response = json_decode(file_get_contents($url,false, $context));
+                $nome = $response->nome;
+
+                if ($response != null) {
+                    echo '<div class="submenu">';
+                    echo $nome;
+                    echo '</div>';
+                } else {
+                    echo '<div class="submenu" onclick="acessarComoAdmin()">
+                    Acessar
+                    </div>';
+                }
+            ?>
         </div>
         <div class="filme-detalhes">
             <div class="filme-imagem">
                 <?php
                 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+                    $id = isset($_POST['id']) ? $_POST['id'] : '';
                     $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
                     // $genero = isset($_POST['genero']) ? $_POST['genero'] : '';
                     $nota = isset($_POST['nota']) ? $_POST['nota'] : '';
@@ -143,7 +168,7 @@
                     echo '<label><input type="radio" name="moeda" value="GBP" onchange="atualizarValorDinamico(this)"> Libra Esterlina (GBP)</label>';
                     echo '</div>';
 
-                    echo '<br><br><button class="botao-comprar" type="button">Comprar - <strong><span id="valor-dinamico"></span></strong></button>';
+                    echo '<br><br><button class="botao-comprar" type="button" onclick="comprar()">Comprar - <strong><span id="valor-dinamico"></span></strong></button>';
                 } else {
                     echo '<p>Nenhum detalhe do filme recebido.</p>';
                 }
@@ -153,12 +178,8 @@
 
         <script>
             // Funções JavaScript
-            function acessarComoAdmin() {
-                window.location.href = 'adminEntry.html';
-            }
-
-            function redirecionarParaIndex() {
-                window.location.href = 'index.php';
+            function redirecionarParaMenu() {
+                window.location.href = 'moviesList.php';
             }
 
             function atualizarValorDinamico(radio) {
@@ -192,6 +213,39 @@
                     .catch(error => {
                         console.error('Erro ao obter a cotação da moeda:', error);
                     });
+            }
+
+            function comprar(){
+                async function comprarAssync() {
+                try {
+                    let id = <?php echo json_encode($id); ?>;
+                    let comprar = confirm('Deseja realmente comprar este filme?');
+                    id = Number(id)
+                    console.log(id)
+                    console.log(comprar)
+                    if (comprar) {
+                        let token = localStorage.getItem('refreshToken');
+                        const response = await fetch(`http://localhost:3001/filme/comprar/${id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Authorization': 'Bearer ' + token
+                            },
+                        }).then(response => response.json()).then(data => {
+                            alert(data.message)
+
+                        }).catch(error => {
+                            console.log(error)
+                        });
+                    } else{
+                        console.log("Erro ao comprar o filme.")
+                    }
+
+                } catch (error) {
+                    console.log(error)
+                }   
+            }
+            comprarAssync()
             }
         </script>
     </div>

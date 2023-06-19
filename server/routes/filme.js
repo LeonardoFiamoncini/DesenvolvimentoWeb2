@@ -10,4 +10,5 @@ router.get("/preencher_filmes", filmeController.preencher_filmes);
 
 router.get("/preco_filmes", filmeController.distribui_precos);
 
+router.post("/comprar/:id",  authMiddleware([]), filmeController.comprar);
 module.exports = router;

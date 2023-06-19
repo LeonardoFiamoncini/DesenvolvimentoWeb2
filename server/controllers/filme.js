@@ -1,8 +1,11 @@
 const { Op } = require("sequelize");
 const Filme = require("../bd/models/filme");
+const RefreshToken = require("../bd/models/refreshToken");
+const Usuario = require("../bd/models/usuario");
+const { getUserToken } = require("./auth");
 require("dotenv").config();
 async function listar(req, res) {
-    const filmes = await Filme.findAll();
+    const filmes = await Filme.findAll( {limit: req.params.limit, offset: req.params.offset});
         
     // const url = 'https://api.themoviedb.org/3/authentication';
     // const options = {
@@ -77,10 +80,33 @@ async function distribui_precos(req, res){
     }
 }
 
+async function comprar(req, res){
+    try {
+        let filme = await Filme.findByPk(req.params.id)
+        const userId = await getUserToken(req);
+        
+        let usuario = await Usuario.findByPk(userId)
+        let valor = filme.preco
+        if (usuario.saldo >= valor){
+            await usuario.update({
+                saldo: usuario.saldo - valor
+            })
+            filme.addUsuario(usuario)   
+        }
+        else{
+            res.status(400)
+        }   
+        return res.status(200).json({message: "Compra realizada com sucesso!"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message: error.message})
+    }
+}
 
 module.exports = {
     distribui_precos,
     listar,
     cadastrar,
-    preencher_filmes
+    preencher_filmes,
+    comprar
 }

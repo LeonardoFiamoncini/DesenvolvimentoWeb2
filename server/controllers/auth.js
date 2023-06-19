@@ -89,7 +89,7 @@ async function getUserToken(req, res) {
     }
 
     const [, token] = authToken.split(' ');
-
+    console.log(token)
     try {
         const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
         return payload.sub;

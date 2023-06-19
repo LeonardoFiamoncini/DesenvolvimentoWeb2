@@ -52,7 +52,7 @@
         <br>
         <div>
             <a href='javascript:history.go(-1)'>Tente novamente</a>
-            <a href='index.php'>Voltar para Home</a><br><br><br>
+            <a href='moviesList.php'>Voltar para Home</a><br><br><br>
         </div>
         </div>";
 

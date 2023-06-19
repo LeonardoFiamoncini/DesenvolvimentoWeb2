@@ -124,9 +124,7 @@
             list-style: none;
         }
     </style>
-
 </head>
-
 <body>
     <div class="container">
         <div class="cabecalho">
@@ -141,8 +139,10 @@
                     <li class="submenu-item" onclick="filtrarFilmes('Comprados')">Comprados</li>
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
-        </div>
-        <?php
+            </div>
+            <div class="submenu" onclick="redirecionarParaAddUser()">Adicionar Usuário</div>
+
+            <?php
                 $url = "http://localhost:3001/usuario/nome";
                 $token = $_GET['token'];
 
@@ -162,8 +162,8 @@
                     echo $nome;
                     echo '</div>';
                 } else {
-                    echo '<div class="submenu" onclick="acessarComoUser()">
-                    Acessar como User
+                    echo '<div class="submenu" onclick="acessarComoAdmin()">
+                    Acessar
                     </div>';
                 }
             ?>
@@ -195,7 +195,8 @@
 
                     $urlFormatada = 'https://image.tmdb.org/t/p/original' . $filme->imagem;
 
-                    echo '<form action="moviePage.php" method="POST">';
+                    echo '<form action="moviePage.php?token=' . $token . '" method="POST">';
+                    echo '<input type="hidden" name="id" value="' . htmlspecialchars($filme->id) . '">';
                     echo '<input type="hidden" name="nome" value="' . htmlspecialchars($filme->nome) . '">';
                     // echo '<input type="hidden" name="genero" value="' . htmlspecialchars($filme->genero) . '">';
                     echo '<input type="hidden" name="descricao" value="' . htmlspecialchars($filme->descricao) . '">';
@@ -207,11 +208,6 @@
                     echo '<img class=\'cartaz\' src="' . $urlFormatada . '">';
                     echo '<div class=\'descricao\'>';
                     echo '<h2 class=\'tituloCartaz\'>' . $filme->nome . '</h2>';
-
-                    // if ($filme['comprado']) echo '<p>Comprado</p>';
-                    // else echo '<br><br>';
-
-                    // echo '<p>' . $filme->genero . '</p>';
 
                     echo '</div>';
                     echo '</button>';
@@ -229,13 +225,14 @@
         </div>
         <script>
             // Funções JavaScript
+
             function toggleSubMenu(submenuId) {
                 var submenu = document.getElementById(submenuId);
                 submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
             }
 
             function redirecionarParaIndex() {
-                window.location.href = 'moviesListAdmin.php';
+                window.location.href = 'moviesList.php';
             }
 
             // Função para filtrar os filmes 
@@ -254,8 +251,8 @@
                 }
             }
 
-            function acessarComoUser() {
-                window.location.href = 'index.php';
+            function redirecionarParaAddUser() {
+                window.location.href = 'addUser.html';
             }
 
             function carregar_mais(direcao){
