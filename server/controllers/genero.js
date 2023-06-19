@@ -13,6 +13,16 @@ async function cadastrar(req, res) {
     
 }
 
+// * Função que lista todos os gêneros
+async function listar(req, res) {
+    try {
+        const generos = await Genero.findAll();
+        res.status(200).json(generos);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
 // * Função que adiciona uma lista de gêneros a um filme
 async function addGeneroFilme(req, res){
     try {
@@ -67,8 +77,24 @@ async function preencher_generos(req, res) {
     }
 }
 
+async function editar_genero(req, res) {
+    try {
+        const genero = req.body;
+        const generoCadastrado = await Genero.update(genero, {
+            where: {
+                id: req.params.id
+            }
+        });
+        res.json(generoCadastrado);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
 module.exports = {
     cadastrar,
     addGeneroFilme,
-    preencher_generos
+    preencher_generos,
+    listar,
+    editar_genero
 }

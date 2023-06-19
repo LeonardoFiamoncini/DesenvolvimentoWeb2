@@ -5,10 +5,12 @@ const { getUserToken } = require('./auth.js');
 // ! Lembrar de fazer a função de verificar cargos
 async function cadastrar(req, res) {
     try {
+        console.log(req.body)
         const usuario = req.body;
-        const usuarioCadastrado = await Usuario.create(usuario);
+        const usuarioCadastrado = await Usuario.create({...usuario, cargo: 'usuario'});
         res.json(usuarioCadastrado);    
     } catch (error) {
+        console.log(error)
         res.status(500).json({message: error.message});
     }
 }

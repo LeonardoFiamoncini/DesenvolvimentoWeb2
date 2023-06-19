@@ -3,10 +3,52 @@ const Filme = require("../bd/models/filme");
 const RefreshToken = require("../bd/models/refreshToken");
 const Usuario = require("../bd/models/usuario");
 const { getUserToken } = require("./auth");
+const Genero = require("../bd/models/genero");
 require("dotenv").config();
 async function listar(req, res) {
-    const filmes = await Filme.findAll( {limit: req.params.limit, offset: req.params.offset});
-        
+    let includeGenero = {};
+    let includeUsuario = {};
+    if (req.params.genero && req.params.genero != "Todos" && req.params.genero != "MeusFilmes") {
+        includeGenero = {
+             include: [
+                {
+                    model: Genero,
+                    where: {
+                        nome: req.params.genero,
+                    },
+                    attributes: [],
+                    required: true    
+                }
+            ]
+            
+        };
+    }
+
+    if (req.params.genero == "MeusFilmes") {
+        includeUsuario = {
+            include: [
+               {
+                   model: Usuario,
+                   where: {
+                       id: res.locals.user,
+                   },
+                   attributes: [],
+                   required: true    
+               }
+           ]
+           
+       };
+    }
+    console.log(req.params)
+    console.log(includeGenero)
+    const filmes = await Filme.findAll( 
+                                        {
+                                         limit: req.params.limit, 
+                                         offset: req.params.offset,
+                                         ...includeGenero,
+                                            ...includeUsuario,
+                                        });
+                                        
     // const url = 'https://api.themoviedb.org/3/authentication';
     // const options = {
     // method: 'GET',
@@ -82,6 +124,7 @@ async function distribui_precos(req, res){
 
 async function comprar(req, res){
     try {
+        console.log("comprando")
         let filme = await Filme.findByPk(req.params.id)
         const userId = await getUserToken(req);
         
@@ -91,14 +134,27 @@ async function comprar(req, res){
             await usuario.update({
                 saldo: usuario.saldo - valor
             })
-            filme.addUsuario(usuario)   
+            await filme.addUsuario(usuario)   
         }
         else{
-            res.status(400)
+            return res.status(400).json({message: "Saldo insuficiente!"})
         }   
         return res.status(200).json({message: "Compra realizada com sucesso!"})
     } catch (error) {
         console.log(error)
+        return res.status(500).json({message: error.message})
+    }
+}
+
+async function deletar_filme(req, res){
+    try {
+        let filme = await Filme.findByPk(req.params.id)
+        if (!filme){
+            return res.status(404).json({message: "Filme não encontrado!"})
+        }
+        await filme.destroy()
+        return res.status(200).json({message: "Filme deletado com sucesso!"})
+    } catch (error) {
         return res.status(500).json({message: error.message})
     }
 }
@@ -108,5 +164,6 @@ module.exports = {
     listar,
     cadastrar,
     preencher_filmes,
-    comprar
+    comprar,
+    deletar_filme
 }

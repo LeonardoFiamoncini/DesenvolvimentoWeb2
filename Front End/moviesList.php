@@ -132,11 +132,20 @@
             <div class="submenu" onclick="toggleSubMenu('submenu-genero')">
                 Filtros
                 <ul class="submenu-list" id="submenu-genero">
-                    <li class="submenu-item" onclick="filtrarFilmes('')">Todos</li>
+                    <?php
+                        $url = "http://localhost:3001/genero/listar";
+                        $response = json_decode(file_get_contents($url,false));
+                        echo '<li class="submenu-item" onclick="filtrarFilmes(\'MeusFilmes\')">Meus filmes</li>';
+                        foreach ($response as $genero) {
+                            echo '<li class="submenu-item" onclick="filtrarFilmes(\'' . $genero->nome . '\')">' . $genero->nome . '</li>';
+                        }
+
+                    ?>
+                    <!-- <li class="submenu-item" onclick="filtrarFilmes('MeusFilmes')">Todos</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Ação')">Ação</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Comédia')">Comédia</li>
                     <li class="submenu-item" onclick="filtrarFilmes('Terror')">Terror</li>
-                    <li class="submenu-item" onclick="filtrarFilmes('Comprados')">Comprados</li>
+                    <li class="submenu-item" onclick="filtrarFilmes('Comprados')">Comprados</li> -->
                     <!-- Adicionar mais gêneros conforme necessário. Só coloquei esses de exemplo no primeiro momento -->
                 </ul>
             </div>
@@ -161,6 +170,7 @@
                     echo '<div class="submenu">';
                     echo $nome;
                     echo '</div>';
+                    echo '<div class="submenu" onclick="logout()">Logout</div>';
                 } else {
                     echo '<div class="submenu" onclick="acessarComoAdmin()">
                     Acessar
@@ -176,8 +186,10 @@
             $token = $_GET['token'];
             $limit = $_GET['limit'];
             $offset = $_GET['offset'];
+            $genero = $_GET['genero'] ?? 'Todos';
+            $generoCodificado = urlencode($genero);
 
-            $url = "http://localhost:3001/filme/listar/$limit/$offset";
+            $url = "http://localhost:3001/filme/listar/$limit/$offset/$generoCodificado";
 
             // Cabeçalho da requisição
             $options = [
@@ -237,22 +249,12 @@
 
             // Função para filtrar os filmes 
             function filtrarFilmes(genero) {
-                var filmes = document.getElementsByClassName('filme');
-                for (var i = 0; i < filmes.length; i++) {
-                    if (
-                        genero === '' || // Mostrar todos os filmes se o gênero estiver vazio
-                        (genero === 'Comprados' && filmes[i].querySelector('p').textContent === 'Comprado') || // Exibir apenas filmes com 'comprado' => true
-                        filmes[i].classList.contains(genero.toLowerCase()) // Filtrar por gênero
-                    ) {
-                        filmes[i].style.display = 'block';
-                    } else {
-                        filmes[i].style.display = 'none';
-                    }
-                }
+                let localizacaoAtual = window.location.href.split('&genero=')[0];
+                window.location.href = localizacaoAtual + '&genero=' + genero;
             }
 
             function redirecionarParaAddUser() {
-                window.location.href = 'addUser.html';
+                window.location.href = window.location.href.split('/moviesList.php')[0] + '/addUser.php?token=' + encodeURIComponent(localStorage.getItem('refreshToken'));
             }
 
             function carregar_mais(direcao){
@@ -271,6 +273,10 @@
                 window.location.href = url;
             }
 
+            function logout() {
+                localStorage.removeItem('refreshToken');
+                window.location.href = 'index.html';
+            }
             // Event listener para fechar os submenus quando clicar fora
             window.addEventListener('click', function(event) {
                 var submenu = document.getElementById('submenu-genero');

@@ -12,7 +12,8 @@
     const cors = require("cors");
     const app = express();
     const PORT = process.env.PORT || 3001;
-    
+    const swaggerUi = require('swagger-ui-express')
+    const swaggerFile = require('./swagger.json')
     app.use(cors());
     app.use(express.json());
     
@@ -26,6 +27,7 @@
     app.use("/usuario", require("./routes/usuario"));
     app.use("/auth", require("./routes/auth"));
     app.use("/genero", require("./routes/genero"));
+    app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
     app.listen(PORT, () => { console.log(`Servidor rodando na porta ${PORT}`) });
 
 })();

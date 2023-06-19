@@ -10,13 +10,23 @@
 </head>
 
 <body>
+    <?php
+        $token = $_GET['token'];
+    ?>
     <div class="container">
         <h1>Adicionar Usuário</h1>
-        <form action="adminEntry.php" method="post">
+        <form action="addUserAction.php" method="post">
+            <input type="hidden" name="token" value="<?php echo $token; ?>">
+            <label for="nome">nome: </label>
+            <input type="text" name="nome" placeholder="Digite aqui seu nome" required><br><br>
             <label for="email">email: </label>
             <input type="text" name="email" placeholder="Digite aqui seu email" required><br><br>
             <label for="password">senha: </label>
             <input type="password" name="password" placeholder="Digite aqui sua senha" required>
+            <br><br>
+
+            <label for="saldo" class="saldo">saldo: </label>
+            <input type="number" name="saldo" placeholder="Digite aqui seu saldo" required>
             <br><br>
             <input type="submit" value="Adicionar" class="centered"><br><br>
         </form>
