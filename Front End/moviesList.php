@@ -123,6 +123,18 @@
         .submenu-list li {
             list-style: none;
         }
+
+        .botao-pagina {
+            padding: 10px 20px;
+            font-family: monospace, Arial, sans-serif;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #0075ff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -229,10 +241,10 @@
             }
             ?>
         </div>
-        <div>
+        <div><br><br>
             <div>
-                <button onclick="carregar_mais('voltar')">Voltar</button>
-                <button onclick="carregar_mais('avancar')">Avançar</button>
+                <button class="botao-pagina" onclick="carregar_mais('voltar')">Voltar</button>
+                <button class="botao-pagina" onclick="carregar_mais('avancar')">Avançar</button>
             </div>
         </div>
         <script>
@@ -269,7 +281,11 @@
                 } else {
                     offset = parseInt(offset) + parseInt(limit);
                 }
-                var url = window.location.href.split('?')[0]+'?token='+encodeURIComponent(token)+'&limit='+limit+'&offset='+offset;
+                let filtro = window.location.href.split('&genero=')[1];
+                if (filtro == undefined) {
+                    filtro = 'Todos';
+                }
+                var url = window.location.href.split('?')[0]+'?token='+encodeURIComponent(token)+'&limit='+limit+'&offset='+offset+'&genero='+filtro;
                 window.location.href = url;
             }
 
